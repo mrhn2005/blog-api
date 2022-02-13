@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\SearchEnum;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -12,8 +14,16 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $posts = Post::query()
+            ->search($request->input(SearchEnum::SEARCH_TERM))
+            ->sort($request->input(SearchEnum::SORT))
+            ->filter($request->query())
+            ->paginate($request->input(SearchEnum::PER_PAGE) ?: 15)
+            ->appends(request()->query());
+
+        return PostResource::collection($posts);
     }
 
     /**
