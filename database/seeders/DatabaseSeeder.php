@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         User::factory(4)
             ->create()
             ->each(
-                fn ($user) => Post::factory(4)->for($user)->create()
+                fn ($user) => Post::factory(4)->forUser($user)->create()
             );
     }
 }
