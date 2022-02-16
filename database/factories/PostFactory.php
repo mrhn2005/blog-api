@@ -14,13 +14,6 @@ class PostFactory extends Factory
 {
     public function definition(): array
     {
-        $title = $this->faker->sentence;
-
-        $post = collect($this->faker->paragraphs(rand(5, 15)))
-            ->map(function($item) {
-                return "<p>$item</p>";
-            })->implode('');
-
         $imageLocationFormat = app(PostAction::class)->imageLocationFormat();
 
         if (! File::exists(Storage::path($imageLocationFormat))) {
@@ -29,8 +22,8 @@ class PostFactory extends Factory
 
         return [
             'user_id' => User::factory(),
-            'title' => $title,
-            'content' => $post,
+            'title' => $this->faker->sentence(3),
+            'content' => $this->faker->paragraphs(rand(5, 15), true),
             'image' => $imageLocationFormat . '/' . $this->faker->image(
                 Storage::path($imageLocationFormat),500,500, null, false
             ),

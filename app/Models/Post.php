@@ -59,7 +59,11 @@ class Post extends Model
 
         $fileparts = pathinfo($this->image);
 
-        return $fileparts['dirname'] . '/'  . $fileparts['filename'] . "_100x100." . $fileparts['extension'];
+        if (! $fileparts) {
+            return null;
+        }
+
+        return @$fileparts['dirname'] . '/'  . @$fileparts['filename'] . "_100x100." . @$fileparts['extension'];
     }
 
     public function getThumbnailImageUrlAttribute()
@@ -71,4 +75,11 @@ class Post extends Model
         return Storage::url($this->thumbnail_image);
     }
 
+    public function getImageLinksAttribute()
+    {
+        return [
+            'original' => $this->image_full_url,
+            'thumbnail' => asset($this->thumbnail_image_url),
+        ];
+    }
 }

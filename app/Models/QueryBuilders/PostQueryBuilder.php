@@ -12,8 +12,8 @@ class PostQueryBuilder extends Builder
         return $this->when(
             $term,
             fn ($q, $term) => $q->where(
-                fn ($q) => $q->whereFullText('title', $term)
-                    ->orWhereFullText('content', $term)
+                fn ($q) => $q->where('title', 'like', "%$term%")
+                    // ->orWhereFullText('content', $term)
             )
         );
     }

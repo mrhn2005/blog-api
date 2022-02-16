@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Actions\PostAction;
 use App\Enums\SearchEnum;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\PostCreateRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Http\Resources\PostResource;
@@ -49,7 +50,7 @@ class PostController extends Controller
 
         return PostResource::make($post)
             ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -99,7 +100,7 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        $this->authorize('delete', $post);
+        // $this->authorize('delete', $post);
 
         $post->delete();
 

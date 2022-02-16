@@ -30,10 +30,11 @@ class PostCreateRequest extends FormRequest
             'content' => ['required', 'string', 'max:20000'],
             'image' => [
                 'required',
+                'mimes:jpg,bmp,png',
                 'max:500',
                 Rule::dimensions()
-                    ->minHeight(400)
-                    ->minWidth(400)
+                    ->minHeight(200)
+                    ->minWidth(200)
                     ->maxWidth(1500)
                     ->maxHeight(1500)
                 //     ->ratio(1)
