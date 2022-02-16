@@ -15,7 +15,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(4)
+        //super admin
+        User::factory()->create([
+            'name' => 'Super Admin User',
+            'email' => 'test@test.com',
+        ]);
+
+        User::factory(6)
             ->create()
             ->each(
                 fn ($user) => Post::factory(4)->forUser($user)->create()

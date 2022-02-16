@@ -50,7 +50,7 @@ class PostController extends Controller
 
         return PostResource::make($post)
             ->response()
-            ->setStatusCode(Response::HTTP_OK);
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**

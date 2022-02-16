@@ -19,7 +19,7 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'image' => $this->image_links,
-            'can_user_manage' => auth()->user()->can('update', $this),
+            'can_user_manage' => auth()->user()->can('update', $this->resource),
             'created_at' => $this->created_at?->format('Y-m-d H:i'),
             'author' => UserResource::make($this->whenLoaded('author')),
         ];
