@@ -8,4 +8,5 @@ class SearchEnum
     public const SORT = 'sort';
     public const PER_PAGE = 'per_page';
     public const USER_ID = 'user_id';
+    public const TAG_NAME = 'tag_name';
 }
