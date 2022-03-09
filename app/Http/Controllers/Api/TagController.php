@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\TagAction;
 use App\Enums\SearchEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TagCreateRequest;
 use App\Http\Resources\TagResource;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TagController extends Controller
 {
@@ -28,12 +31,20 @@ class TagController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\TagCreateRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TagCreateRequest $request, TagAction $tagAction)
     {
-        //
+        $imagePath = $tagAction->uploadPhoto($request->file('image'));
+
+        $post = Tag::create(
+            array_merge($request->validated(), ['image' => $imagePath])
+        );
+
+        return TagResource::make($post)
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**

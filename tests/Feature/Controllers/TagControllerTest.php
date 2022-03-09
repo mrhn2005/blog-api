@@ -2,8 +2,7 @@
 
 namespace Tests\Feature\Controllers;
 
-use App\Actions\PostAction;
-use App\Models\Post;
+use App\Actions\TagAction;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,5 +30,29 @@ class TagControllerTest extends TestCase
                     ->has('data.0.name')
                     ->etc()
             );
+    }
+
+    public function test_user_can_create_tag()
+    {
+        $user = User::factory()->create();
+
+        $inputs = [
+            'name' => 'test',
+            'description' => 'test description',
+            'image' => UploadedFile::fake()->image('avatar.jpg', 200, 200),
+        ];
+
+        $response = $this->actingAs($user)
+            ->postJson('api/tags', $inputs);
+
+        $response->assertStatus(Response::HTTP_CREATED);
+
+        $this->assertDatabaseHas('tags', Arr::except($inputs, 'image'));
+
+        $tag = Tag::latest('tag_id')->first();
+        $this->assertFileExists(Storage::path($tag->image));
+
+        //clean-up
+        app(TagAction::class)->deletePhotos($tag);
     }
 }
