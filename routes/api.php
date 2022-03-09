@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\PostTagController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -25,4 +26,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [UserController::class, 'show']);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('tags', TagController::class);
+
+    Route::controller(PostTagController::class)->prefix('posts')->group(function () {
+        Route::put('{post}/tags/attach', 'attach');
+        Route::put('{post}/tags/detach', 'detach');
+    });
 });
