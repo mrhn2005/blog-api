@@ -38,7 +38,9 @@ class PostCreateRequest extends FormRequest
                     ->maxWidth(1500)
                     ->maxHeight(1500)
                 //     ->ratio(1)
-            ]
+            ],
+            'tags' => ['array', 'min:1'],
+            'tags.*' => ['required', Rule::exists('tags', 'id')],
         ];
     }
 }

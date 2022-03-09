@@ -4,6 +4,7 @@ namespace Tests\Feature\Controllers;
 
 use App\Actions\PostAction;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -44,11 +45,14 @@ class PostControllerTest extends TestCase
     public function test_admin_user_can_create_post()
     {
         $user = User::factory(2)->create()->admins()->first();
-
+        $tag = Tag::factory()->create();
         $inputs = [
             'title' => 'test',
             'content' => '<p>Test Content</p>',
             'image' => UploadedFile::fake()->image('avatar.jpg', 500, 500),
+            'tags' => [
+                $tag->id,
+            ]
         ];
 
         $response = $this->actingAs($user)
@@ -56,9 +60,11 @@ class PostControllerTest extends TestCase
 
         $response->assertStatus(Response::HTTP_CREATED);
 
-        $this->assertDatabaseHas('posts', Arr::except($inputs, 'image'));
+        $this->assertDatabaseHas('posts', Arr::only($inputs, ['title', 'content']));
 
         $post = $user->posts()->first();
+        $this->assertEquals($post->tags->first()->id, $tag->id);
+
         $this->assertFileExists(Storage::path($post->image));
 
         //clean-up

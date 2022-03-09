@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\QueryBuilders\PostQueryBuilder;
+use App\Models\Traits\HasTags;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,9 +11,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory,
+        HasTags;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'content',
+        'image',
+    ];
 
     public function newEloquentBuilder($query): PostQueryBuilder
     {

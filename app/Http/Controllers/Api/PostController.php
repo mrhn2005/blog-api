@@ -48,6 +48,10 @@ class PostController extends Controller
             array_merge($request->validated(), ['image' => $imagePath])
         );
 
+        if (! empty($request->tags)) {
+            $post->attachTags($request->tags);
+        }
+
         return PostResource::make($post)
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
