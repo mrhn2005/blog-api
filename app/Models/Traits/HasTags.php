@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -40,5 +41,13 @@ trait HasTags
             ->each(fn (Tag $tag) => $this->tags()->detach($tag));
 
         return $this;
+    }
+
+    public function scopeWithTags(Builder $query, array $tagIds): Builder
+    {
+        return $query->whereHas(
+            'tags',
+            fn ($q) => $q->whereIn('id', $tagIds)
+        );
     }
 }

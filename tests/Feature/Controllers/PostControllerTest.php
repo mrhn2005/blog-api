@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers;
 
 use App\Actions\PostAction;
+use App\Enums\SearchEnum;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
@@ -35,6 +36,27 @@ class PostControllerTest extends TestCase
             ->assertJson(fn (AssertableJson $json) =>
                 $json->where('meta.total', $count)
                     ->has('data.0.title')
+                    ->etc()
+            );
+
+        //clean-up
+        $posts->each(fn ($post) => app(PostAction::class)->deletePhotos($post));
+    }
+
+    public function test_user_can_filter_posts_by_tag_ids()
+    {
+        $user = User::factory()->create();
+        $posts = Post::factory()->forUser($user)->count($count = 4)->create();
+        $tag = Tag::factory()->create();
+        $post = $posts->last();
+        $post->tags()->attach($tag);
+        $response = $this->actingAs($user)->getJson('api/posts?'.SearchEnum::TAG_ID.'='.$tag->id);
+
+        $response
+            ->assertSuccessful()
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->where('meta.total', 1)
+                    ->where('data.0.id', $post->id)
                     ->etc()
             );
 
