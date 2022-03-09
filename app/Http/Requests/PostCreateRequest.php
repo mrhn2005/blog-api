@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -36,7 +35,7 @@ class PostCreateRequest extends FormRequest
                     ->minHeight(200)
                     ->minWidth(200)
                     ->maxWidth(1500)
-                    ->maxHeight(1500)
+                    ->maxHeight(1500),
                 //     ->ratio(1)
             ],
             'tags' => ['array', 'min:1'],

@@ -33,8 +33,8 @@ class PostControllerTest extends TestCase
 
         $response
             ->assertSuccessful()
-            ->assertJson(fn (AssertableJson $json) =>
-                $json->where('meta.total', $count)
+            ->assertJson(
+                fn (AssertableJson $json) => $json->where('meta.total', $count)
                     ->has('data.0.title')
                     ->etc()
             );
@@ -50,12 +50,12 @@ class PostControllerTest extends TestCase
         $tag = Tag::factory()->create();
         $post = $posts->last();
         $post->tags()->attach($tag);
-        $response = $this->actingAs($user)->getJson('api/posts?'.SearchEnum::TAG_ID.'='.$tag->id);
+        $response = $this->actingAs($user)->getJson('api/posts?' . SearchEnum::TAG_ID . '=' . $tag->id);
 
         $response
             ->assertSuccessful()
-            ->assertJson(fn (AssertableJson $json) =>
-                $json->where('meta.total', 1)
+            ->assertJson(
+                fn (AssertableJson $json) => $json->where('meta.total', 1)
                     ->where('data.0.id', $post->id)
                     ->etc()
             );
@@ -74,7 +74,7 @@ class PostControllerTest extends TestCase
             'image' => UploadedFile::fake()->image('avatar.jpg', 500, 500),
             'tags' => [
                 $tag->id,
-            ]
+            ],
         ];
 
         $response = $this->actingAs($user)
@@ -104,11 +104,11 @@ class PostControllerTest extends TestCase
             'content' => '<p>Test Content</p>',
             'tags' => [
                 $tag->id,
-            ]
+            ],
         ];
 
         $response = $this->actingAs($user)
-            ->putJson('api/posts/'.$post->id, $inputs);
+            ->putJson('api/posts/' . $post->id, $inputs);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -132,7 +132,7 @@ class PostControllerTest extends TestCase
     {
         $user = User::factory(2)->create()->admins()->first();
         $post = Post::factory()->forUser($user)->create();
-        $response = $this->actingAs($user)->deleteJson('api/posts/'.$post->id);
+        $response = $this->actingAs($user)->deleteJson('api/posts/' . $post->id);
 
         $response->assertStatus(Response::HTTP_OK);
         $this->assertDatabaseMissing('posts', [

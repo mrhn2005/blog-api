@@ -22,11 +22,11 @@ class PostTagControllerTest extends TestCase
         $inputs = [
             'tags' => [
                 $tag->id,
-            ]
+            ],
         ];
 
         $response = $this->actingAs($user)
-            ->putJson('api/posts/'.$post->id.'/tags/attach', $inputs);
+            ->putJson('api/posts/' . $post->id . '/tags/attach', $inputs);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -46,7 +46,7 @@ class PostTagControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->putJson('api/posts/'.$post->id.'/tags/detach', $inputs);
+            ->putJson('api/posts/' . $post->id . '/tags/detach', $inputs);
 
         $response->assertStatus(Response::HTTP_OK);
         $this->assertCount(0, $post->tags);

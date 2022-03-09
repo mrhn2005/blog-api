@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Actions\TagAction;
 use App\Models\Tag;
-use Illuminate\Support\Facades\Storage;
 
 class TagObserver
 {

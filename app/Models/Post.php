@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
 class Post extends Model
 {
     use HasFactory,
@@ -39,7 +40,7 @@ class Post extends Model
 
     public function getImageUrlAttribute()
     {
-        if (! $this->image) {
+        if (!$this->image) {
             return null;
         }
 
@@ -48,7 +49,7 @@ class Post extends Model
 
     public function getImageFullUrlAttribute()
     {
-        if (! $this->image || ! Storage::exists($this->image)) {
+        if (!$this->image || !Storage::exists($this->image)) {
             return 'https://picsum.photos/400/400';
         }
 
@@ -57,24 +58,24 @@ class Post extends Model
 
     public function getThumbnailImageAttribute()
     {
-        if (! $this->image) {
+        if (!$this->image) {
             return null;
         }
 
-        $prod['item_image_url'] = "new-thumb-01.jpg";
+        $prod['item_image_url'] = 'new-thumb-01.jpg';
 
         $fileparts = pathinfo($this->image);
 
-        if (! $fileparts) {
+        if (!$fileparts) {
             return null;
         }
 
-        return @$fileparts['dirname'] . '/'  . @$fileparts['filename'] . "_100x100." . @$fileparts['extension'];
+        return @$fileparts['dirname'] . '/' . @$fileparts['filename'] . '_100x100.' . @$fileparts['extension'];
     }
 
     public function getThumbnailImageUrlAttribute()
     {
-        if (! $this->image) {
+        if (!$this->image) {
             return null;
         }
 

@@ -15,7 +15,7 @@ class TagAction
 
     public function deletePhotos(Tag $tag): void
     {
-        if (! $tag->image) {
+        if (!$tag->image) {
             return;
         }
 

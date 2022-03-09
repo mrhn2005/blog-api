@@ -35,8 +35,8 @@ class TagCreateRequest extends FormRequest
                     ->minHeight(50)
                     ->minWidth(50)
                     ->maxWidth(400)
-                    ->maxHeight(400)
-            ]
+                    ->maxHeight(400),
+            ],
         ];
     }
 }

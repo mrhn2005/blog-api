@@ -1,16 +1,16 @@
 <?php
 
-if (! function_exists('settings')) {
+if (!function_exists('settings')) {
     function settings(string $key, $default = null)
     {
         return config('settings.' . $key, $default);
     }
 }
 
-if (! function_exists('makeThumbnail')) {
+if (!function_exists('makeThumbnail')) {
     function makeThumbnail($src, $width = 100, $height = 100)
     {
-        if (! is_file($src)) {
+        if (!is_file($src)) {
             throw new Exception("No valid image provided with {$src}.");
         }
 
@@ -27,16 +27,16 @@ if (! function_exists('makeThumbnail')) {
         $destX = intval(($width - $newWidth) / 2);
         $destY = intval(($height - $newHeight) / 2);
         if ($arrImageDetails[2] == IMAGETYPE_GIF) {
-            $imgt = "ImageGIF";
-            $imgcreatefrom = "ImageCreateFromGIF";
+            $imgt = 'ImageGIF';
+            $imgcreatefrom = 'ImageCreateFromGIF';
         }
         if ($arrImageDetails[2] == IMAGETYPE_JPEG) {
-            $imgt = "ImageJPEG";
-            $imgcreatefrom = "ImageCreateFromJPEG";
+            $imgt = 'ImageJPEG';
+            $imgcreatefrom = 'ImageCreateFromJPEG';
         }
         if ($arrImageDetails[2] == IMAGETYPE_PNG) {
-            $imgt = "ImagePNG";
-            $imgcreatefrom = "ImageCreateFromPNG";
+            $imgt = 'ImagePNG';
+            $imgcreatefrom = 'ImageCreateFromPNG';
         }
 
         if ($imgt) {

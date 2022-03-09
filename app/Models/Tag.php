@@ -22,7 +22,7 @@ class Tag extends Model
 
     public function getImageUrlAttribute()
     {
-        if (! $this->image) {
+        if (!$this->image) {
             return null;
         }
 

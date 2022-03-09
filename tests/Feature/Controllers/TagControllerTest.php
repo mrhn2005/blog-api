@@ -25,8 +25,8 @@ class TagControllerTest extends TestCase
 
         $response
             ->assertSuccessful()
-            ->assertJson(fn (AssertableJson $json) =>
-                $json->where('meta.total', $count)
+            ->assertJson(
+                fn (AssertableJson $json) => $json->where('meta.total', $count)
                     ->has('data.0.name')
                     ->etc()
             );
@@ -64,8 +64,8 @@ class TagControllerTest extends TestCase
 
         $response
             ->assertSuccessful()
-            ->assertJson(fn (AssertableJson $json) =>
-                $json->where('data.name', $tag->name)
+            ->assertJson(
+                fn (AssertableJson $json) => $json->where('data.name', $tag->name)
                     ->where('data.id', $tag->id)
                     ->etc()
             );
@@ -81,7 +81,7 @@ class TagControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->putJson('api/tags/'.$tag->id, $inputs);
+            ->putJson('api/tags/' . $tag->id, $inputs);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -95,7 +95,7 @@ class TagControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $tag = Tag::factory()->create();
-        $response = $this->actingAs($user)->deleteJson('api/tags/'.$tag->id);
+        $response = $this->actingAs($user)->deleteJson('api/tags/' . $tag->id);
 
         $response->assertStatus(Response::HTTP_OK);
         $this->assertDatabaseMissing('tags', [

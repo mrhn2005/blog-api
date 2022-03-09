@@ -37,7 +37,7 @@ class PostQueryBuilder extends Builder
 
     public function sort(?string $sort): self
     {
-        if (! $sort) {
+        if (!$sort) {
             return $this->latest('id');
         }
 
