@@ -89,6 +89,10 @@ class PostController extends Controller
 
         $post->update(array_merge($request->validated(), $imageArray));
 
+        if (! empty($request->tags)) {
+            $post->tags()->sync($request->tags);
+        }
+
         return PostResource::make($post)
             ->response()
             ->setStatusCode(Response::HTTP_OK);

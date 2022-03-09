@@ -74,10 +74,15 @@ class PostControllerTest extends TestCase
     public function test_admin_user_can_update_post()
     {
         $user = User::factory(2)->create()->admins()->first();
-        $post = Post::factory()->forUser($user)->create();
+        $post = Post::factory()->hasTags(2)->forUser($user)->create();
+        $oldTags = $post->tags;
+        $tag = Tag::factory()->create();
         $inputs = [
             'title' => 'test',
             'content' => '<p>Test Content</p>',
+            'tags' => [
+                $tag->id,
+            ]
         ];
 
         $response = $this->actingAs($user)
@@ -86,7 +91,16 @@ class PostControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
 
         $post->refresh();
-        $this->assertEquals($inputs, $post->only('title', 'content'));
+        $this->assertEquals(Arr::except($inputs, 'tags'), $post->only('title', 'content'));
+        $this->assertEquals($post->tags()->get()->first()->id, $tag->id);
+        $this->assertCount(1, $post->tags);
+        $oldTags->each(
+            fn ($tag) => $this->assertDatabaseMissing('taggables', [
+                'tag_id' => $tag->id,
+                'taggable_id' => $post->id,
+                'taggable_type' => Post::class,
+            ])
+        );
 
         //clean-up
         app(PostAction::class)->deletePhotos($post);
