@@ -90,4 +90,16 @@ class TagControllerTest extends TestCase
         //clean-up
         app(TagAction::class)->deletePhotos($tag);
     }
+
+    public function test_user_can_delete_tags()
+    {
+        $user = User::factory()->create();
+        $tag = Tag::factory()->create();
+        $response = $this->actingAs($user)->deleteJson('api/tags/'.$tag->id);
+
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertDatabaseMissing('tags', [
+            'id' => $tag->id,
+        ]);
+    }
 }
