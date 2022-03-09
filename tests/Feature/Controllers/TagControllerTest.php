@@ -70,4 +70,24 @@ class TagControllerTest extends TestCase
                     ->etc()
             );
     }
+
+    public function test_user_can_update_tag()
+    {
+        $user = User::factory()->create();
+        $tag = Tag::factory()->create();
+        $inputs = [
+            'name' => 'test',
+            'description' => 'test description',
+        ];
+
+        $response = $this->actingAs($user)
+            ->putJson('api/tags/'.$tag->id, $inputs);
+
+        $response->assertStatus(Response::HTTP_OK);
+
+        $this->assertEquals($inputs, $tag->refresh()->only('name', 'description'));
+
+        //clean-up
+        app(TagAction::class)->deletePhotos($tag);
+    }
 }

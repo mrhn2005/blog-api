@@ -28,7 +28,7 @@ class TagCreateRequest extends FormRequest
             'name' => ['required', 'string', 'max:100'],
             'description' => ['required', 'string', 'max:200'],
             'image' => [
-                'required',
+                'nullable',
                 'mimes:jpg,bmp,png',
                 'max:500',
                 Rule::dimensions()

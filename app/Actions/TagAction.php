@@ -15,6 +15,10 @@ class TagAction
 
     public function deletePhotos(Tag $tag): void
     {
+        if (! $tag->image) {
+            return;
+        }
+
         Storage::delete($tag->image);
     }
 

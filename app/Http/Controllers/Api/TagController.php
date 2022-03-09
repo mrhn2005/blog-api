@@ -38,11 +38,11 @@ class TagController extends Controller
     {
         $imagePath = $tagAction->uploadPhoto($request->file('image'));
 
-        $post = Tag::create(
+        $tag = Tag::create(
             array_merge($request->validated(), ['image' => $imagePath])
         );
 
-        return TagResource::make($post)
+        return TagResource::make($tag)
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
     }
@@ -63,13 +63,23 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\TagCreateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TagCreateRequest $request, Tag $tag, TagAction $tagAction)
     {
-        //
+        $imageArray = [];
+        if ($request->has('image')) {
+            $tagAction->deletePhotos($tag);
+            $imageArray['image'] = $tagAction->uploadPhoto($request->file('image'));
+        }
+
+        $tag->update(array_merge($request->validated(), $imageArray));
+
+        return TagResource::make($tag)
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
