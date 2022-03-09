@@ -55,4 +55,19 @@ class TagControllerTest extends TestCase
         //clean-up
         app(TagAction::class)->deletePhotos($tag);
     }
+
+    public function test_user_can_view_tags()
+    {
+        $user = User::factory()->create();
+        $tag = Tag::factory()->create();
+        $response = $this->actingAs($user)->getJson('api/tags/' . $tag->id);
+
+        $response
+            ->assertSuccessful()
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->where('data.name', $tag->name)
+                    ->where('data.id', $tag->id)
+                    ->etc()
+            );
+    }
 }
